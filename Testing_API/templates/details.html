@@ -1,0 +1,22 @@
+{% load static %}
+
+<div class="container">
+    {% if dept %}
+        <h2>Details page {{dept.DepartmentName}}</h2>
+        <br>
+
+        <h3>Faculty name</h3>
+        <div>
+            <div>{{ dept.Faculty }}</div>
+        </div>
+
+        <h3>Hod_Name</h3>
+        <div>
+            <div>
+                {{dept.Hod_name}}
+            </div>
+        </div>
+    {% else %}
+        <div>No details found.</div>
+    {% endif %}
+</div>

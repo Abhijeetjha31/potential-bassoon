@@ -1,0 +1,14 @@
+{% if id %} 
+    <form method="POST" action="{% url 'edit' id %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Update</button>
+    </form>
+
+{% else %}
+    <form method="POST" action="{% url 'add' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Submit</button>
+    </form> 
+{% endif%}

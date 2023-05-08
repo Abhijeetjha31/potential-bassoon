@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <title>Document</title>
+</head>
+<style>
+   .Container{
+position: absolute;
+left: 300px;
+padding-top: 120px;
+    }
+    .heading{
+        position: absolute;
+        left: 600px;
+        padding-top: 40px;
+    }
+</style>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-radius: 10px;
+}
+th,td{
+  border-spacing: 15px;
+
+}
+td {
+  width: 150px;
+  text-align: center;
+  border: 1px solid black;
+  padding: 5px;
+}
+</style>
+<body>
+    <div class="body">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6" style="text-align: center;">
+                    <h1 class="heading" style="text-align: center;">Departments</h1>
+                </div>
+                <div class="col-md-6" style="text-align: center; size: 20px;padding-top: 40px;">
+                    <button class="btn btn-outline-primary" id="add-dept" data-href="{% url 'add' %}">Add</button>
+                </div>
+            </div>                  
+        </div>
+        <div class="Container">
+        <div class="card-body" style="padding: 20px;margin-top: 50px;text-align: center;">
+
+            
+            {% if dpt %}
+            <table>
+                <thead>
+                    <tr style="padding-left: 4px;">
+                        <th>DepartmentId</th>
+                        <th>DepartmentName</th>
+                        <th>Faculty Name</th>
+                        <th>Hod_name</th>
+                        <th>Details</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        {% for ele in dpt %}
+                        <tr>
+                            <td style="padding-left: 10px;">
+                                {{ele.DepartmentId}}
+                            </td>
+                            <td style="padding-left: 10px;">
+                                {{ele.DepartmentName}}
+                            </td>
+                            <td style="padding-left: 10px; ">
+                                {{ele.Faculty}}
+                            </td>
+                            <td style="padding-left: 10px;">
+                                {{ele.Hod_name}}
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <button class="btn btn-outline-primary" id="detail-dept" data-href="{% url 'detail' ele.DepartmentId %}">Click for details</button>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <button class="btn btn-outline-warning" id="edit-dept" data-href="{% url 'edit' ele.DepartmentId %}">Edit</button>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <button  class="btn btn-outline-danger" ><a href="{% url 'delete' ele.DepartmentId %}">Delete</a></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    
+                </tbody>
+
+            </table>
+            {% else %}
+                <h4>No Data Available</h4>
+            {% endif %}
+            
+        </div>
+    </div>
+    </div>
+    
+
+  
+  <!-- Detail Modal -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Department Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add Department</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Department</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).on('click', '#detail-dept',function(event) {
+            event.preventDefault();
+            
+            $.ajax({
+            url: $(this).attr('data-href'),
+            success: function(response) {
+                $('#detailModal .modal-body').html(response);
+                $('#detailModal').modal('show');
+            }
+            });
+        });
+    $(document).on('click', '#add-dept',function(event) {
+            event.preventDefault();
+            
+            $.ajax({
+            url: $(this).attr('data-href'),
+            success: function(response) {
+                $('#addModal .modal-body').html(response);
+                $('#addModal').modal('show');
+            }
+            });
+        });
+    $(document).on('click', '#edit-dept',function(event) {
+            event.preventDefault();
+            
+            $.ajax({
+            url: $(this).attr('data-href'),
+            success: function(response) {
+                $('#editModal .modal-body').html(response);
+                $('#editModal').modal('show');
+            }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
