@@ -1,16 +1,14 @@
-from django.urls import path
-# from django.conf.urls import url
-from Api import views
-from .views import departmentApi,getbyid
 
+
+# urls.py
+from django.urls import path, include
+from rest_framework import routers
+from .views import DepartmentsViewSet
+
+router = routers.DefaultRouter()
+router.register(r'departments', DepartmentsViewSet)
 
 urlpatterns = [
-    path('department/', views.departmentApi, name='department'),
-    path('department/<int:id>/',views.departmentApi),
-    path('getbyId/<int:pk>/',views.getbyid),
-    path('',views.getroutes),
+    path('', include(router.urls)),
 ]
 
-# urlpatterns=[
-#     path('getDepartment/',views.getDepartment),
-# ]
