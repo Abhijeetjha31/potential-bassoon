@@ -13,9 +13,9 @@ def depart(request):
     }
     return render(request,'main.html',context)
 
-def create(request):
-    form=DeparmentForm()
-    return render(request,{"form":form})
+# def create(request):
+#     form=DeparmentForm()
+#     return render(request,{"form":form})
 
 def add(request):
     form=DeparmentForm()
