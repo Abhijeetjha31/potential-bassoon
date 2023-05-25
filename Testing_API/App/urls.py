@@ -8,5 +8,6 @@ urlpatterns = [
     path('detail/<int:pk>/',views.detail,name="detail"),
     path('add',views.add,name="add"),
     path('open_notebook/<int:id>/', views.open_notebook, name='open_notebook'),
-    path('open_notepad/<int:id>/', views.open_notepad, name='open_notebook'),
+    # path('notebook/<int:id>/',views.notebook_view, name='notebook'),
+    path('open_notepad/<int:id>/', views.open_notepad, name='open_notepad'),
 ]

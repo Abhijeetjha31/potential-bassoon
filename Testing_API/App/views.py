@@ -20,22 +20,12 @@ def open_notepad(request, id):
         subprocess.Popen(['notepad.exe', temp_file.name])
     return HttpResponse("Notepad has been opened for ID {}".format(id))
 
-import webbrowser
-import tempfile
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from .models import Departments
+# import webbrowser
+# import tempfile
+# from django.http import HttpResponse
+# from django.template.loader import render_to_string
+# from .models import Departments
 
-# def open_notepad(request, id):
-#     data = Departments.objects.get(DepartmentId=id)
-#     rendered = render_to_string('details.html', {'dept': data})
-#     with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
-#         temp_file.write(rendered)
-#         temp_file.flush()
-#         # Open the temporary file in Jupyter Notebook
-#         notebook_url = 'http://localhost:8888/edit/untitled.txt/{}'.format(temp_file.name)
-#         webbrowser.open_new_tab(notebook_url)
-#     return HttpResponse("Jupyter Notebook has been opened for ID {}".format(id))
 
 import subprocess
 import nbformat
@@ -43,33 +33,85 @@ import json
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
+# def open_notebook(request, id):
+#     data = Departments.objects.get(DepartmentId=id)
+
+#     # Retrieve the contents of the details.html template for the given ID
+#     details_page_content = render_to_string('details.html', {'data': data})
+
+#     file_name = "first"
+
+#     # for i in data:
+#     #     if i == id:
+#     #         file_name+=id
+
+#     notebook_name = file_name
+            
+#     # Create a new .ipynb file with the given name
+#     nb = nbformat.v4.new_notebook()
+#     nb['cells'] = [nbformat.v4.new_code_cell(source=details_page_content)]
+#     with open(f"{notebook_name}.ipynb", 'w') as f:
+#         json.dump(nb, f)
+    
+#     # Open the newly created .ipynb file in a Jupyter Notebook instance
+#     subprocess.Popen(['jupyter', 'notebook', f"{notebook_name}.ipynb"])
+
+#     return HttpResponse("Jupyter Notebook has been opened for ID {}".format(file_name))
+
+
+import nbformat
+import json
+import subprocess
+from django.shortcuts import redirect
+from django.http import JsonResponse
+
 def open_notebook(request, id):
     data = Departments.objects.get(DepartmentId=id)
 
-    # Retrieve the contents of the details.html template for the given ID
-    details_page_content = render_to_string('details.html', {'data': data})
+    notebook_name = f"notebook_{id}"
 
-    file_name = "first"
-
-    # for i in data:
-    #     if i == id:
-    #         file_name+=id
-
-    notebook_name = file_name
-            
     # Create a new .ipynb file with the given name
     nb = nbformat.v4.new_notebook()
-    nb['cells'] = [nbformat.v4.new_code_cell(source=details_page_content)]
+
+    # Convert the model field data to a string (assuming it's a text field)
+    field_data = str((data.Faculty))
+
+    # Create a code cell and assign the model field data to it
+    cell = nbformat.v4.new_code_cell(source=field_data)
+    nb['cells'] = [cell]
+
     with open(f"{notebook_name}.ipynb", 'w') as f:
-        json.dump(nb, f)
+        nbformat.write(nb, f)
     
     # Open the newly created .ipynb file in a Jupyter Notebook instance
+    
     subprocess.Popen(['jupyter', 'notebook', f"{notebook_name}.ipynb"])
 
-    return HttpResponse("Jupyter Notebook has been opened for ID {}".format(file_name))
 
 
 
+    # No need to return a response here
+
+
+
+# from django.shortcuts import render
+# from IPython.terminal.embed import InteractiveShellEmbed
+
+# def notebook_view(request,id):
+#     print("cllicked")
+#     shell = InteractiveShellEmbed()
+#     shell()
+#     return render(request, 'App/details.html')
+
+# import subprocess
+
+# def notebook_view(request, id):
+#     print("clicked")
+
+#     # Launch Jupyter Notebook using subprocess
+#     subprocess.Popen(["jupyter", "notebook"])
+
+#     return render(request, 'App/details.html')
 
 
 
