@@ -60,32 +60,48 @@ from django.template.loader import render_to_string
 
 
 import nbformat
+import nbformat
 import json
 import subprocess
-from django.shortcuts import redirect
 from django.http import JsonResponse
+from django.shortcuts import redirect
 
 def open_notebook(request, id):
     data = Departments.objects.get(DepartmentId=id)
+
+    # Convert the data to a dictionary
+    department_data = {
+        'DepartmentId': data.DepartmentId,
+        "DepartmentName":data.DepartmentName,
+        'Faculty': data.Faculty,
+        'Hod_name':data.Hod_name,
+        # Add more fields from the Departments table as needed
+    }
+
+    # Convert the department_data dictionary to JSON
+    json_data = json.dumps(department_data)
 
     notebook_name = f"notebook_{id}"
 
     # Create a new .ipynb file with the given name
     nb = nbformat.v4.new_notebook()
 
-    # Convert the model field data to a string (assuming it's a text field)
-    field_data = str((data.Faculty))
-
-    # Create a code cell and assign the model field data to it
-    cell = nbformat.v4.new_code_cell(source=field_data)
+    # Create a code cell and assign the JSON data to it
+    cell = nbformat.v4.new_code_cell(source=f"json_data = {json_data}")
     nb['cells'] = [cell]
 
     with open(f"{notebook_name}.ipynb", 'w') as f:
         nbformat.write(nb, f)
-    
+
     # Open the newly created .ipynb file in a Jupyter Notebook instance
-    
     subprocess.Popen(['jupyter', 'notebook', f"{notebook_name}.ipynb"])
+
+    # Return a redirect response or JSON response if needed
+    # For example:
+    # return redirect('/some-url')
+    # or
+    # return JsonResponse({'status': 'success'})
+
 
 
 
